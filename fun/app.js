@@ -1,5 +1,13 @@
 const canvas = document.getElementById("artCanvas");
 const ctx = canvas.getContext("2d");
+const overlay = document.getElementById("overlay"); // Select the overlay element
+const keysPressed = document.getElementById("keysPressed");
+
+// Hide the overlay after the first key press
+window.addEventListener("keypress", function handler(event) {
+  overlay.style.display = "none"; // Hide the overlay
+  window.removeEventListener("keypress", handler); // Remove this event listener
+});
 
 // Resize canvas to fill window
 function resizeCanvas() {
@@ -15,15 +23,16 @@ function animate() {
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw animations here
+  // Set the fill style to white
+  ctx.fillStyle = "white";
+
+  // Fill the entire canvas with the fill style
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   requestAnimationFrame(animate);
 }
 
 animate();
-
-// Select the existing HTML element to display the keys pressed
-const keysPressed = document.getElementById("keysPressed");
 
 // Key press handler
 window.addEventListener("keypress", (event) => {
@@ -41,28 +50,34 @@ const animations = {
 
   a: (key) => {
     const square = {
-      x: 0,
-      y: 0,
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
       size: 50,
-      speed: 5,
-      xDirection: 1,
-      yDirection: 1,
+      speed: 0.05, // Adjust speed for a smoother rotation
+      angle: 0,
     };
 
     function drawSquare() {
+      ctx.save(); // Save the current state of the context
+      ctx.translate(square.x + square.size / 2, square.y + square.size / 2); // Move the origin to the center of the square
+      ctx.rotate(square.angle); // Rotate the context
       ctx.fillStyle = `hsl(${(square.x + square.y) % 360}, 100%, 50%)`;
-      ctx.fillRect(square.x, square.y, square.size, square.size);
+      ctx.clearRect(
+        -square.size / 2,
+        -square.size / 2,
+        square.size,
+        square.size
+      ); // Clear the area where the square is
+      ctx.fillRect(
+        -square.size / 2,
+        -square.size / 2,
+        square.size,
+        square.size
+      ); // Draw the square centered on the new origin
 
-      square.x += square.speed * square.xDirection;
-      square.y += square.speed * square.yDirection;
+      square.angle += square.speed; // Increase the angle for the next frame
 
-      if (square.x + square.size > canvas.width || square.x < 0) {
-        square.xDirection *= -1; // Reverse direction
-      }
-
-      if (square.y + square.size > canvas.height || square.y < 0) {
-        square.yDirection *= -1; // Reverse direction
-      }
+      ctx.restore(); // Restore the context to its original state
 
       requestAnimationFrame(drawSquare);
     }
@@ -915,4 +930,11 @@ const animations = {
 
     drawMovingZigzag();
   },
+};
+
+window.onload = function () {
+  const clearButton = document.getElementById("clearButton");
+  clearButton.addEventListener("click", () => {
+    location.reload();
+  });
 };
