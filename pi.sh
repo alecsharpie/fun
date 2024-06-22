@@ -1,6 +1,7 @@
-# zip and send to raspberry pi
+PI="pi@192.168.0.12"
+
 zip -r build.zip fun
-ssh pi@192.168.0.12 "rm -rf ~/pi/fun"
-ssh pi@192.168.0.12 "mkdir ~/pi/fun"
-scp build.zip pi@192.168.0.12:~/pi/fun/build.zip
-ssh pi@192.168.0.12 "unzip -o build.zip -d /home/pi/fun"
+ssh $PI "rm -rf ~/pi/fun"
+ssh $PI "mkdir ~/pi/fun"
+scp build.zip $PI:~/pi/fun/build.zip
+ssh $PI "unzip -o ~/pi/fun/build.zip -d ~/pi/fun"
