@@ -20,13 +20,9 @@ resizeCanvas();
 
 // Animation loop
 function animate() {
-  // Clear the canvas
+  // Set up the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Set the fill style to white
   ctx.fillStyle = "white";
-
-  // Fill the entire canvas with the fill style
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   requestAnimationFrame(animate);
@@ -34,19 +30,15 @@ function animate() {
 
 animate();
 
-// Key press handler
 window.addEventListener("keypress", (event) => {
   const key = event.key.toLowerCase();
   if (animations[key]) {
-    animations[key](key); // Pass the key to the animation function
+    animations[key](key);
   }
-  // Update the text content of the keysPressed element
   keysPressed.textContent += key + " ";
 });
 
-// Animation modules
 const animations = {
-  // Animation modules
 
   a: (key) => {
     const square = {
