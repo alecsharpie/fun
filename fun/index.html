@@ -6,17 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fun</title>
     <style>
-        body {
+        /* Reset default margin and padding */
+        
+        body,
+        html {
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+        }
+        
+        body {
             position: relative;
-            /* Add this line */
         }
         
         canvas {
             display: block;
         }
-        /* Add this block */
         
         #overlay {
             position: absolute;
@@ -27,11 +31,19 @@
             font-size: 2em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
+        /* Add margin and position to keysPressed */
+        
+        #keysPressed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            margin: 1em;
+            color: black;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Wrap the paragraph in a div with id "overlay" -->
     <div id="overlay">
         <p>Type something, maybe your name.</p>
     </div>

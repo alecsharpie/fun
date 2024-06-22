@@ -171,8 +171,8 @@ const animations = {
 
   e: (key) => {
     let angle = 0;
-    const speed = 0.05;
-    const radius = 100;
+    const speed = -0.05;
+    const radius = 111;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
@@ -206,9 +206,22 @@ const animations = {
       ctx.fillStyle = "orange";
       ctx.beginPath();
       ctx.moveTo(triangle.x, triangle.y);
-      ctx.lineTo(triangle.x + triangle.size * Math.cos(triangle.angle), triangle.y + triangle.size * Math.sin(triangle.angle));
-      ctx.lineTo(triangle.x + triangle.size * Math.cos(triangle.angle + 2/3 * Math.PI), triangle.y + triangle.size * Math.sin(triangle.angle + 2/3 * Math.PI));
-      ctx.lineTo(triangle.x + triangle.size * Math.cos(triangle.angle + 4/3 * Math.PI), triangle.y + triangle.size * Math.sin(triangle.angle + 4/3 * Math.PI));
+      ctx.lineTo(
+        triangle.x + triangle.size * Math.cos(triangle.angle),
+        triangle.y + triangle.size * Math.sin(triangle.angle)
+      );
+      ctx.lineTo(
+        triangle.x +
+          triangle.size * Math.cos(triangle.angle + (2 / 3) * Math.PI),
+        triangle.y +
+          triangle.size * Math.sin(triangle.angle + (2 / 3) * Math.PI)
+      );
+      ctx.lineTo(
+        triangle.x +
+          triangle.size * Math.cos(triangle.angle + (4 / 3) * Math.PI),
+        triangle.y +
+          triangle.size * Math.sin(triangle.angle + (4 / 3) * Math.PI)
+      );
       ctx.closePath();
       ctx.fill();
 
@@ -243,6 +256,13 @@ const animations = {
   },
 
   h: (key) => {
+    let radius = 50;
+    let growing = true;
+    const maxRadius = 200; // Increased max radius
+    const minRadius = 20; // Added min radius
+    const speed = 2; // Increased speed
+    const x = canvas.width / 2;
+    const y = canvas.height / 2;
     const ellipse = {
       x: canvas.width / 2,
       y: canvas.height / 2,
@@ -271,8 +291,8 @@ const animations = {
 
   i: (key) => {
     let angle = 0;
-    const speed = 0.05;
-    const radius = 100;
+    const speed = 0.25;
+    const radius = 150; // Increased radius
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
@@ -300,13 +320,13 @@ const animations = {
 
   j: (key) => {
     const rectangle = {
-      x: 0,
-      y: 0,
+      x: canvas.width, // Start at the top right
+      y: Math.random() * canvas.height, // Random starting y
       width: 50,
       height: 100,
       speed: 5,
-      xDirection: 1,
-      yDirection: 1,
+      xDirection: -1, // Move left
+      yDirection: Math.random() > 0.5 ? 1 : -1, // Random direction
     };
 
     function drawMovingRectangle() {
@@ -316,11 +336,19 @@ const animations = {
       rectangle.x += rectangle.speed * rectangle.xDirection;
       rectangle.y += rectangle.speed * rectangle.yDirection;
 
-      if (rectangle.x + rectangle.width > canvas.width || rectangle.x < 0) {
+      if (rectangle.x + rectangle.width > canvas.width) {
+        rectangle.x = canvas.width - rectangle.width;
+        rectangle.xDirection *= -1; // Reverse direction
+      } else if (rectangle.x < 0) {
+        rectangle.x = 0;
         rectangle.xDirection *= -1; // Reverse direction
       }
 
-      if (rectangle.y + rectangle.height > canvas.height || rectangle.y < 0) {
+      if (rectangle.y + rectangle.height > canvas.height) {
+        rectangle.y = canvas.height - rectangle.height;
+        rectangle.yDirection *= -1; // Reverse direction
+      } else if (rectangle.y < 0) {
+        rectangle.y = 0;
         rectangle.yDirection *= -1; // Reverse direction
       }
 
@@ -332,8 +360,8 @@ const animations = {
 
   k: (key) => {
     let angle = 0;
-    const speed = 0.05;
-    const radius = 100;
+    const speed = -0.05;
+    const radius = 275; // Decreased radius
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
@@ -344,8 +372,11 @@ const animations = {
       ctx.fillStyle = "lightblue";
       ctx.beginPath();
       ctx.moveTo(x, y);
-      for(let i = 1; i <= 6; i++) {
-        ctx.lineTo(x + 20 * Math.cos(i * Math.PI / 3), y + 20 * Math.sin(i * Math.PI / 3));
+      for (let i = 1; i <= 6; i++) {
+        ctx.lineTo(
+          x + 20 * Math.cos((i * Math.PI) / 3),
+          y + 20 * Math.sin((i * Math.PI) / 3)
+        );
       }
       ctx.closePath();
       ctx.fill();
@@ -371,7 +402,10 @@ const animations = {
       ctx.strokeStyle = "lime";
       ctx.beginPath();
       ctx.moveTo(line.x, line.y);
-      ctx.lineTo(line.x + line.length * Math.cos(line.angle), line.y + line.length * Math.sin(line.angle));
+      ctx.lineTo(
+        line.x + line.length * Math.cos(line.angle),
+        line.y + line.length * Math.sin(line.angle)
+      );
       ctx.stroke();
 
       line.angle += line.speed;
@@ -383,37 +417,37 @@ const animations = {
   },
 
   m: (key) => {
-    let angle = 0;
-    const speed = 0.05;
-    const radius = 100;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const diamond = {
+      x: canvas.width / 2,
+      y: 0,
+      speed: 5,
+      yDirection: 1,
+    };
 
-    function drawRotatingHeart() {
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
-
-      ctx.fillStyle = "pink";
+    function drawMovingDiamond() {
+      ctx.fillStyle = "green";
       ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.bezierCurveTo(x, y - 3, x - 5, y - 15, x - 25, y - 15);
-      ctx.bezierCurveTo(x - 55, y - 15, x - 55, y + 22.5, x - 55, y + 22.5);
-      ctx.bezierCurveTo(x - 55, y + 40, x - 35, y + 62, x, y + 80);
-      ctx.bezierCurveTo(x + 35, y + 62, x + 55, y + 40, x + 55, y + 22.5);
-      ctx.bezierCurveTo(x + 55, y + 22.5, x + 55, y - 15, x + 25, y - 15);
-      ctx.bezierCurveTo(x + 10, y - 15, x, y - 3, x, y);
+      ctx.moveTo(diamond.x, diamond.y);
+      ctx.lineTo(diamond.x + 10, diamond.y + 20);
+      ctx.lineTo(diamond.x, diamond.y + 40);
+      ctx.lineTo(diamond.x - 10, diamond.y + 20);
+      ctx.closePath();
       ctx.fill();
 
-      angle += speed;
+      diamond.y += diamond.speed * diamond.yDirection;
 
-      requestAnimationFrame(drawRotatingHeart);
+      if (diamond.y + 40 > canvas.height || diamond.y < 0) {
+        diamond.yDirection *= -1; // Reverse direction
+      }
+
+      requestAnimationFrame(drawMovingDiamond);
     }
 
-    drawRotatingHeart();
+    drawMovingDiamond();
   },
 
   n: (key) => {
-    const text = {
+    const star = {
       x: 0,
       y: 0,
       speed: 5,
@@ -421,32 +455,40 @@ const animations = {
       yDirection: 1,
     };
 
-    function drawMovingText() {
+    function drawMovingStar() {
       ctx.fillStyle = "orange";
-      ctx.font = "30px Arial";
-      ctx.fillText("Hello!", text.x, text.y);
+      ctx.beginPath();
+      ctx.moveTo(star.x, star.y);
+      for (let i = 1; i <= 5; i++) {
+        ctx.lineTo(
+          star.x + 20 * Math.cos((i * 2 * Math.PI) / 5),
+          star.y + 20 * Math.sin((i * 2 * Math.PI) / 5)
+        );
+      }
+      ctx.closePath();
+      ctx.fill();
 
-      text.x += text.speed * text.xDirection;
-      text.y += text.speed * text.yDirection;
+      star.x += star.speed * star.xDirection;
+      star.y += star.speed * star.yDirection;
 
-      if (text.x + ctx.measureText("Hello!").width > canvas.width || text.x < 0) {
-        text.xDirection *= -1; // Reverse direction
+      if (star.x + 20 > canvas.width || star.x < 0) {
+        star.xDirection *= -1; // Reverse direction
       }
 
-      if (text.y + 30 > canvas.height || text.y < 0) {
-        text.yDirection *= -1; // Reverse direction
+      if (star.y + 20 > canvas.height || star.y < 0) {
+        star.yDirection *= -1; // Reverse direction
       }
 
-      requestAnimationFrame(drawMovingText);
+      requestAnimationFrame(drawMovingStar);
     }
 
-    drawMovingText();
+    drawMovingStar();
   },
 
   o: (key) => {
     let angle = 0;
     const speed = 0.05;
-    const radius = 100;
+    const radius = 275;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
 
@@ -457,8 +499,11 @@ const animations = {
       ctx.fillStyle = "purple";
       ctx.beginPath();
       ctx.moveTo(x, y);
-      for(let i = 1; i <= 5; i++) {
-        ctx.lineTo(x + 20 * Math.cos(i * 2 * Math.PI / 5), y + 20 * Math.sin(i * 2 * Math.PI / 5));
+      for (let i = 1; i <= 5; i++) {
+        ctx.lineTo(
+          x + 20 * Math.cos((i * 2 * Math.PI) / 5),
+          y + 20 * Math.sin((i * 2 * Math.PI) / 5)
+        );
       }
       ctx.closePath();
       ctx.fill();
@@ -515,8 +560,11 @@ const animations = {
       ctx.fillStyle = "green";
       ctx.beginPath();
       ctx.moveTo(x, y);
-      for(let i = 1; i <= 8; i++) {
-        ctx.lineTo(x + 20 * Math.cos(i * Math.PI / 4), y + 20 * Math.sin(i * Math.PI / 4));
+      for (let i = 1; i <= 8; i++) {
+        ctx.lineTo(
+          x + 20 * Math.cos((i * Math.PI) / 4),
+          y + 20 * Math.sin((i * Math.PI) / 4)
+        );
       }
       ctx.closePath();
       ctx.fill();
@@ -561,4 +609,311 @@ const animations = {
     drawMovingRectangle();
   },
 
+  s: (key) => {
+    let angle = 0;
+    const speed = 0.005;
+    const radius = 175;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function drawRotatingSquare() {
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      ctx.fillStyle = "red";
+      ctx.fillRect(x, y, 20, 20);
+
+      angle += speed;
+
+      requestAnimationFrame(drawRotatingSquare);
+    }
+
+    drawRotatingSquare();
+  },
+
+  t: (key) => {
+    const heart = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      speed: 5,
+      xDirection: Math.random() > 0.5 ? 1 : -1, // Random direction
+      yDirection: Math.random() > 0.5 ? 1 : -1, // Random direction
+    };
+
+    function drawMovingHeart() {
+      ctx.fillStyle = "pink";
+      ctx.beginPath();
+      ctx.moveTo(heart.x, heart.y);
+      ctx.bezierCurveTo(
+        heart.x,
+        heart.y - 3,
+        heart.x - 5,
+        heart.y - 15,
+        heart.x - 25,
+        heart.y - 15
+      );
+      ctx.bezierCurveTo(
+        heart.x - 55,
+        heart.y - 15,
+        heart.x - 55,
+        heart.y + 22.5,
+        heart.x - 55,
+        heart.y + 22.5
+      );
+      ctx.bezierCurveTo(
+        heart.x - 55,
+        heart.y + 40,
+        heart.x - 35,
+        heart.y + 62,
+        heart.x,
+        heart.y + 80
+      );
+      ctx.bezierCurveTo(
+        heart.x + 35,
+        heart.y + 62,
+        heart.x + 55,
+        heart.y + 40,
+        heart.x + 55,
+        heart.y + 22.5
+      );
+      ctx.bezierCurveTo(
+        heart.x + 55,
+        heart.y + 22.5,
+        heart.x + 55,
+        heart.y - 15,
+        heart.x + 25,
+        heart.y - 15
+      );
+      ctx.bezierCurveTo(
+        heart.x + 10,
+        heart.y - 15,
+        heart.x,
+        heart.y - 3,
+        heart.x,
+        heart.y
+      );
+      ctx.fill();
+
+      heart.x += heart.speed * heart.xDirection;
+      heart.y += heart.speed * heart.yDirection;
+
+      // Ensure the heart stays within the canvas
+      if (heart.x + 55 > canvas.width) {
+        heart.x = canvas.width - 55;
+        heart.xDirection *= -1; // Reverse direction
+      } else if (heart.x - 55 < 0) {
+        heart.x = 55;
+        heart.xDirection *= -1; // Reverse direction
+      }
+
+      if (heart.y + 80 > canvas.height) {
+        heart.y = canvas.height - 80;
+        heart.yDirection *= -1; // Reverse direction
+      } else if (heart.y - 15 < 0) {
+        heart.y = 15;
+        heart.yDirection *= -1; // Reverse direction
+      }
+
+      requestAnimationFrame(drawMovingHeart);
+    }
+
+    drawMovingHeart();
+  },
+
+  u: (key) => {
+    let angle = 0;
+    const speed = 0.05;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function drawRotatingTriangle() {
+      const radius = 100 + 50 * Math.sin(angle); // Spiral pattern
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      ctx.fillStyle = "blue";
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 20, y + 40);
+      ctx.lineTo(x - 20, y + 40);
+      ctx.closePath();
+      ctx.fill();
+
+      angle += speed;
+
+      requestAnimationFrame(drawRotatingTriangle);
+    }
+
+    drawRotatingTriangle();
+  },
+
+  v: (key) => {
+    const triangle = {
+      x: 0,
+      y: 0,
+      size: 50,
+      speed: 5,
+      xDirection: 1,
+      yDirection: 1,
+    };
+
+    function drawMovingTriangle() {
+      ctx.fillStyle = "purple";
+      ctx.beginPath();
+      ctx.moveTo(triangle.x, triangle.y);
+      ctx.lineTo(triangle.x + triangle.size, triangle.y);
+      ctx.lineTo(triangle.x + triangle.size / 2, triangle.y + triangle.size);
+      ctx.closePath();
+      ctx.fill();
+
+      triangle.x += triangle.speed * triangle.xDirection;
+      triangle.y += triangle.speed * triangle.yDirection;
+
+      if (triangle.x + triangle.size > canvas.width || triangle.x < 0) {
+        triangle.xDirection *= -1; // Reverse direction
+      }
+
+      if (triangle.y + triangle.size > canvas.height || triangle.y < 0) {
+        triangle.yDirection *= -1; // Reverse direction
+      }
+
+      requestAnimationFrame(drawMovingTriangle);
+    }
+
+    drawMovingTriangle();
+  },
+
+  w: (key) => {
+    let angle = 0;
+    const speed = 0.05;
+    const radius = 100;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function drawRotatingStar() {
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      ctx.fillStyle = "orange";
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      for (let i = 1; i <= 5; i++) {
+        ctx.lineTo(
+          x + 20 * Math.cos((i * 2 * Math.PI) / 5),
+          y + 20 * Math.sin((i * 2 * Math.PI) / 5)
+        );
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      angle += speed;
+
+      requestAnimationFrame(drawRotatingStar);
+    }
+
+    drawRotatingStar();
+  },
+
+  x: (key) => {
+    const cross = {
+      x: 0,
+      y: 0,
+      size: 50,
+      speed: 5,
+      xDirection: 1,
+      yDirection: 1,
+    };
+
+    function drawMovingCross() {
+      ctx.fillStyle = "cyan";
+      ctx.fillRect(
+        cross.x,
+        cross.y + cross.size / 3,
+        cross.size,
+        cross.size / 3
+      );
+      ctx.fillRect(
+        cross.x + cross.size / 3,
+        cross.y,
+        cross.size / 3,
+        cross.size
+      );
+
+      cross.x += cross.speed * cross.xDirection;
+      cross.y += cross.speed * cross.yDirection;
+
+      if (cross.x + cross.size > canvas.width || cross.x < 0) {
+        cross.xDirection *= -1; // Reverse direction
+      }
+
+      if (cross.y + cross.size > canvas.height || cross.y < 0) {
+        cross.yDirection *= -1; // Reverse direction
+      }
+
+      requestAnimationFrame(drawMovingCross);
+    }
+
+    drawMovingCross();
+  },
+
+  y: (key) => {
+    let angle = 0;
+    const speed = 0.05;
+    const radius = 100;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    function drawRotatingRectangle() {
+      const x = centerX + radius * Math.cos(angle) * Math.sin(angle); // Figure-eight pattern
+      const y = centerY + radius * Math.sin(angle) * Math.cos(angle); // Figure-eight pattern
+
+      ctx.fillStyle = "purple";
+      ctx.fillRect(x, y, 20, 40);
+
+      angle += speed;
+
+      requestAnimationFrame(drawRotatingRectangle);
+    }
+
+    drawRotatingRectangle();
+  },
+
+  z: (key) => {
+    const zigzag = {
+      x: 0,
+      y: 0,
+      size: 50,
+      speed: 5,
+      xDirection: 1,
+      yDirection: 1,
+    };
+
+    function drawMovingZigzag() {
+      ctx.fillStyle = "green";
+      ctx.beginPath();
+      ctx.moveTo(zigzag.x, zigzag.y);
+      ctx.lineTo(zigzag.x + zigzag.size, zigzag.y + zigzag.size);
+      ctx.lineTo(zigzag.x + zigzag.size, zigzag.y + zigzag.size / 2);
+      ctx.lineTo(zigzag.x + zigzag.size * 2, zigzag.y + zigzag.size / 2);
+      ctx.lineTo(zigzag.x + zigzag.size * 2, zigzag.y + zigzag.size);
+      ctx.lineTo(zigzag.x + zigzag.size * 3, zigzag.y);
+      ctx.closePath();
+      ctx.fill();
+
+      zigzag.x += zigzag.speed * zigzag.xDirection;
+      zigzag.y += zigzag.speed * zigzag.yDirection;
+
+      if (zigzag.x + zigzag.size * 3 > canvas.width || zigzag.x < 0) {
+        zigzag.xDirection *= -1; // Reverse direction
+      }
+
+      if (zigzag.y + zigzag.size > canvas.height || zigzag.y < 0) {
+        zigzag.yDirection *= -1; // Reverse direction
+      }
+
+      requestAnimationFrame(drawMovingZigzag);
+    }
+
+    drawMovingZigzag();
+  },
 };
