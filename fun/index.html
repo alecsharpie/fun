@@ -4,21 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas Art App</title>
+    <title>Fun</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
+            position: relative;
+            /* Add this line */
         }
         
         canvas {
             display: block;
         }
+        /* Add this block */
+        
+        #overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 
 <body>
+    <!-- Wrap the paragraph in a div with id "overlay" -->
+    <div id="overlay">
+        <p>Type something, maybe your name.</p>
+    </div>
     <canvas id="artCanvas"></canvas>
+    <p id="keysPressed"></p>
     <script src="app.js"></script>
 </body>
 
