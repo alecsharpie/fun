@@ -50,7 +50,7 @@ const animations = {
     };
 
     function drawSquare() {
-      ctx.fillStyle = "green";
+      ctx.fillStyle = `hsl(${(square.x + square.y) % 360}, 100%, 50%)`;
       ctx.fillRect(square.x, square.y, square.size, square.size);
 
       square.x += square.speed * square.xDirection;
@@ -149,7 +149,7 @@ const animations = {
     };
 
     function drawLine() {
-      ctx.strokeStyle = "red";
+      ctx.strokeStyle = `hsl(${(line.x + line.y) % 360}, 100%, 50%)`;
       ctx.beginPath();
       ctx.moveTo(line.x, line.y);
       ctx.lineTo(line.x + 10, line.y + 10);
@@ -456,7 +456,7 @@ const animations = {
     };
 
     function drawMovingStar() {
-      ctx.fillStyle = "orange";
+      ctx.fillStyle = `hsl(${(star.x + star.y) % 360}, 100%, 50%)`;
       ctx.beginPath();
       ctx.moveTo(star.x, star.y);
       for (let i = 1; i <= 5; i++) {
@@ -578,40 +578,43 @@ const animations = {
   },
 
   r: (key) => {
-    const rectangle = {
-      x: 0,
-      y: 0,
-      width: 100,
-      height: 50,
-      speed: 5,
-      xDirection: 1,
-      yDirection: 1,
+    const line = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      length: 100,
+      angle: 0,
+      speed: 0.01,
+      lengthSpeed: 1,
     };
 
-    function drawMovingRectangle() {
-      ctx.fillStyle = "blue";
-      ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    function drawPulsatingLine() {
+      // Change the color based on the length
+      ctx.strokeStyle = `hsl(${line.length % 360}, 100%, 50%)`;
+      ctx.beginPath();
+      ctx.moveTo(line.x, line.y);
+      ctx.lineTo(
+        line.x + line.length * Math.cos(line.angle),
+        line.y + line.length * Math.sin(line.angle)
+      );
+      ctx.stroke();
 
-      rectangle.x += rectangle.speed * rectangle.xDirection;
-      rectangle.y += rectangle.speed * rectangle.yDirection;
+      line.angle += line.speed;
+      line.length += line.lengthSpeed;
 
-      if (rectangle.x + rectangle.width > canvas.width || rectangle.x < 0) {
-        rectangle.xDirection *= -1; // Reverse direction
+      // Reverse the length direction when the line reaches a certain length
+      if (line.length > 200 || line.length < 50) {
+        line.lengthSpeed *= -1;
       }
 
-      if (rectangle.y + rectangle.height > canvas.height || rectangle.y < 0) {
-        rectangle.yDirection *= -1; // Reverse direction
-      }
-
-      requestAnimationFrame(drawMovingRectangle);
+      requestAnimationFrame(drawPulsatingLine);
     }
 
-    drawMovingRectangle();
+    drawPulsatingLine();
   },
 
   s: (key) => {
     let angle = 0;
-    const speed = 0.005;
+    const speed = (Math.random() < 0.5 ? -1 : 1) * 0.005;
     const radius = 175;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
@@ -880,36 +883,32 @@ const animations = {
 
   z: (key) => {
     const zigzag = {
-      x: 0,
-      y: 0,
+      angle: 0,
+      speed: 0.05,
+      radius: 100,
       size: 50,
-      speed: 5,
-      xDirection: 1,
-      yDirection: 1,
     };
 
     function drawMovingZigzag() {
-      ctx.fillStyle = "green";
+      // Calculate the position based on a circular path
+      zigzag.x = canvas.width / 2 + zigzag.radius * Math.cos(zigzag.angle);
+      zigzag.y = canvas.height / 2 + zigzag.radius * Math.sin(zigzag.angle);
+
+      // Change the color based on the position
+      ctx.fillStyle = `hsl(${(zigzag.x + zigzag.y) % 360}, 100%, 50%)`;
+
       ctx.beginPath();
       ctx.moveTo(zigzag.x, zigzag.y);
-      ctx.lineTo(zigzag.x + zigzag.size, zigzag.y + zigzag.size);
-      ctx.lineTo(zigzag.x + zigzag.size, zigzag.y + zigzag.size / 2);
-      ctx.lineTo(zigzag.x + zigzag.size * 2, zigzag.y + zigzag.size / 2);
-      ctx.lineTo(zigzag.x + zigzag.size * 2, zigzag.y + zigzag.size);
-      ctx.lineTo(zigzag.x + zigzag.size * 3, zigzag.y);
-      ctx.closePath();
-      ctx.fill();
-
-      zigzag.x += zigzag.speed * zigzag.xDirection;
-      zigzag.y += zigzag.speed * zigzag.yDirection;
-
-      if (zigzag.x + zigzag.size * 3 > canvas.width || zigzag.x < 0) {
-        zigzag.xDirection *= -1; // Reverse direction
+      for (let i = 0; i < 4; i++) {
+        ctx.lineTo(
+          zigzag.x + i * zigzag.size,
+          zigzag.y + (i % 2) * zigzag.size
+        );
       }
+      ctx.lineTo(zigzag.x + 4 * zigzag.size, zigzag.y);
+      ctx.stroke();
 
-      if (zigzag.y + zigzag.size > canvas.height || zigzag.y < 0) {
-        zigzag.yDirection *= -1; // Reverse direction
-      }
+      zigzag.angle += zigzag.speed;
 
       requestAnimationFrame(drawMovingZigzag);
     }
